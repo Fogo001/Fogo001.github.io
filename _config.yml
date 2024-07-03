@@ -1,6 +1,6 @@
 title: Mo
 remote_theme: pages-themes/minimal
-logo: assets/images/profile_pic.png
 plugins: 
 - jekyll-remote-theme
 show_downloads: true
+profile_picture: /assets/images/profile_pic.png
