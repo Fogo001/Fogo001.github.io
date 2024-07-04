@@ -1,7 +1,6 @@
 title: Mo
 logo: /assets/images/profile.png
 show_downloads: true
-remote_theme: pages-themes/minimal
-plugins: 
-- jekyll-remote-theme
-
+remote_theme: pages-themes/cayman@v0.2.0
+plugins:
+- jekyll-remote-theme 
