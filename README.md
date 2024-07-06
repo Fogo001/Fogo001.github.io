@@ -4,7 +4,7 @@
 
 # Table of contents 
 - [Executive Summary](#executive-summary)
-	-[Objectives](#objectives)
+  -[Objectives](#objectives)
 - [Data Source](#data-source)
 - [Methodology](#methodology)
 	- [Stages](#stages)
@@ -15,12 +15,10 @@
   	- [Data Cleaning](#data-cleaning)
   - [Transform the Data](#transform-the-data)- [Testing](#testing)
  	 - [Data Quality Tests](#data-quality-tests)
-- [Analysis](#analysis) ***
+- [Analysis](#analysis)
   - [Exploratory Data Analysis](#exploratory-data-analysis)
- 	 - [Findings](#findings)   ***
+ 	 - [Findings](#findings) 
 - [Recommendations](#recommendations)
- 	 - [Potential ROI](#potential-roi)
-  - [Potential Courses of Actions](#potential-courses-of-actions)
 - [Feasibility](#feasibility)
 - [Conclusion](#conclusion)
 
