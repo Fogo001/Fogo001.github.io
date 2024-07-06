@@ -495,7 +495,10 @@ where cancellation_year <> 'Active'
 OR  total_flights <= 10
 
 ```
-| Churned Customers | 2819 |
+| Category          | Value |
+|-------------------|-------|
+| Churned Customers | 2819  |
+
 
 
 Then , I calculated the churn rate 
@@ -524,16 +527,17 @@ FROM
 
 The following values were used as measurement to determine any common characteristics carried out by churned customers: the average total fights, average distance travelled, average points accumulated and average points redeemed  by churned customers 
 
-| year | avg_total_flights | avg_distance_travelled | avg_ points _accumulated | avg_points_redeemed |
-|------|----------------- |---------------------------- | ---------------------------- |
-| 2017    | 10 | 2354 | 235.079 | 61 |
-| 2018    | 9 | 2369  | 252.596 | 56 |
+| year | avg_total_flights | avg_distance_travelled | avg_points_accumulated | avg_points_redeemed |
+|------|--------------------|------------------------|------------------------|---------------------|
+| 2017 | 10                 | 2354                   | 235.079                | 61                  |
+| 2018 | 9                  | 2369                   | 252.596                | 56                  |
 
 Then the average total fights, average distance travelled, average points accumulated and average points redeemed  by retained customers 
-| year | avg_total_flights | avg_distance_travelled | avg_ points _accumulated | avg_points_redeemed |
-|------|-----------------  |---------------------------- | ---------------------------- |
-| 2017 | 63 | 14726 | 1470.354 | 371 |
-| 2018 | 72 | 17169 | 1794.119 | 438 |
+
+| year | avg_total_flights | avg_distance_travelled | avg_points_accumulated | avg_points_redeemed |
+|------|--------------------|------------------------|------------------------|---------------------|
+| 2017 | 63                 | 14726                  | 1470.354               | 371                 |
+| 2018 | 72         
 
 
 The chart above indicates the following:
