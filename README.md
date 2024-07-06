@@ -524,16 +524,16 @@ FROM
 
 The following values were used as measurement to determine any common characteristics carried out by churned customers: the average total fights, average distance travelled, average points accumulated and average points redeemed  by churned customers 
 
-| year | avg_total_flights       | avg_distance_travelled       | avg_ points _accumulated       | avg_points_redeemed       |
-|------|-----------------   |---------------------------- | ---------------------------- |
-| 2017    | 10          | 2354                     | 235.079                 | 61
-| 2018    | 9          | 2369                     | 252.596                 | 56
+| year | avg_total_flights | avg_distance_travelled | avg_ points _accumulated | avg_points_redeemed |
+|------|----------------- |---------------------------- | ---------------------------- |
+| 2017    | 10 | 2354 | 235.079 | 61 |
+| 2018    | 9 | 2369  | 252.596 | 56 |
 
 Then the average total fights, average distance travelled, average points accumulated and average points redeemed  by retained customers 
-| year | avg_total_flights       | avg_distance_travelled       | avg_ points _accumulated       | avg_points_redeemed       |
-|------|-----------------   |---------------------------- | ---------------------------- |
-| 2017    | 63          | 14726                     | 1470.354                | 371
-| 2018    | 72          | 17169                     | 1794.119                 | 438
+| year | avg_total_flights | avg_distance_travelled | avg_ points _accumulated | avg_points_redeemed |
+|------|-----------------  |---------------------------- | ---------------------------- |
+| 2017 | 63 | 14726 | 1470.354 | 371 |
+| 2018 | 72 | 17169 | 1794.119 | 438 |
 
 
 The chart above indicates the following:
@@ -541,17 +541,6 @@ The chart above indicates the following:
 - Retained customers travel six times the distance compared to churned customers. This could indicate that customers who travel longer distances are more likely to stay loyal, possibly because they are more likely to accumulate benefits and find the service more indispensable.
 -  Retained customers accumulate almost seven times the points of churned customers. This highlights the importance of the loyalty program in customer retention. Customers who earn more points are likely incentivized to continue using the service to maximize their rewards.
 -   Retained customers redeem more than six times the points of churned customers. This suggests that the ability to redeem points effectively is critical in keeping customers engaged. It could imply that churned customers may not find the points redemption process as accessible or valuable, leading to their discontinuation.
-
-Metric 4
-| Average Distance | Average Flights Booked        |
-|-----------------   |---------------------------- |
-| `14648          | 62         |
-
-
-
-| Segment | Total_customers       | Churned_customers       | Churn_Rate       |
-|------|-----------------   |---------------------------- | ---------------------------- |
-| Overall    | 16737          | 2819                     | 0.1684                 |
 
 ### 5. Analyze specific segments more deeply (e.g., high-value customers vs. low-value customers) to understand the characteristics driving CLV?
 
@@ -612,10 +601,6 @@ We segmented customers into low value customers and high value customers based o
 # Feasibility
 - Data Gaps: Missing data from certain periods or for specific customer segments due to system outages or recording errors.
 -  Zero Values: Some customers might have zero points redeemed, making log transformation problematic unless these values are handled appropriately.
-
--the months individuals usually cancel
-
-
 
 
 
