@@ -82,7 +82,7 @@ Regression Analysis was used to see the correlation between flights booked and p
 8. Write the documentation + commentary
 9. Publish the data to GitHub Pages
 
-## # Observations
+## Observations
 1.	There are two separate tables with containing important information. This means both tables must be merged to meet our objective
 2.	The Column ‘Country’ only contains ‘Canada’
 3.	There are at least 6 columns that contain the data we need for this analysis, indicating we have the necessary information needed without needing to contact the client for any more data
@@ -423,7 +423,6 @@ group by loyalty_number
 ```
 python
 
-```
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
