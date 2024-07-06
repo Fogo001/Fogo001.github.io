@@ -284,6 +284,10 @@ SELECT
     COUNT(*) AS no_of_rows
 FROM
     customer_loyalty_history;
+```
+![Row count check](assets/images/1_row_count_check.png)
+
+```sql
 
 SELECT
     COUNT(*) AS no_of_rows
@@ -291,7 +295,7 @@ FROM
     customer_flight_activity;
 ```
 
-![Row count check](assets/images/1_row_count_check.png)
+![Row count check](assets/images/1b_row_count_check.png)
 
 
 
@@ -310,6 +314,11 @@ FROM
 WHERE
     TABLE_NAME = 'customer_loyalty_history'
 
+```
+
+![Column count check](assets/images/2_column_count_check.png)
+
+```
 
 SELECT
     COUNT(*) AS column_count
@@ -321,7 +330,7 @@ WHERE
 
 ```
 ### Output 
-![Column count check](assets/images/2_column_count_check.png)
+![Column count check](assets/images/2b_column_count_check.png)
 
 
 
@@ -336,6 +345,9 @@ FROM
     INFORMATION_SCHEMA.COLUMNS
 WHERE
     TABLE_NAME = 'customer_flight_activity';
+```
+![Data type check](assets/images/3_data_type_check.png)
+```
 	SELECT
     COLUMN_NAME,
     DATA_TYPE
@@ -345,7 +357,7 @@ WHERE
     TABLE_NAME = 'customer_loyalty_history';
 ```
 ### Output
-![Data type check](assets/images/3_data_type_check.png)
+![Data type check](assets/images/3b_data_type_check.png)
 
 
 ## Duplicate count check
@@ -389,6 +401,8 @@ order by year
 
 ```
 
+![Total Number of Flights Trend](assets/images/5_total_flights_trend.png)
+
 From the chart above, we can see there was a significant increased in the number of flights booked. This may be attributed to the introduction of the 2018 loyalty promotions.
 
 
@@ -403,6 +417,7 @@ group by months, year
 order by year
 
 ```
+![Monthly Total Flights Trend](assets/images/6_monthly_total_flights_trend.png)
 
 The chart indicates that there is a pattern in the number of flights booked in specific months in a year. In both 2017 and 2018, the months with the highest number of flights being June and July and the months with the least number of flight bookings being January and February. 
 As July falls during summer, people tend to travel to various destinations. This may be responsible for the increase in the number of flights
@@ -448,6 +463,7 @@ plt.ylabel('Total Flights Booked')
 plt.show()
 
 ```
+![Total Points Redeemed vs Total Flights Booked](assets/images/7_regression_chart.png)
 
 The correlation coefficient of 0.5395 indicates a moderate positive relationship between total points redeemed and total flights booked. This suggests as the number of points redeemed increases, the number of flights booked also tends to increase. The relationship is moderate, meaning there is a noticeable trend, but it is not exceptionally strong. There are other factors likely influencing both variables.
 
@@ -468,12 +484,10 @@ plt.ylabel('Log of Total Flights Booked')
 plt.show()
 
 ```
-
+![Total Points Redeemed vs Total Flights Booked](assets/images/7b_log_regression_chart.png)
 
 The straight line implies that there is no diminishing returns effect; the rate of increase remains consistent as points redeemed increase.
 The slope of the regression line is 0.05, meaning each additional total points redeemed is associated with a 0.05-point increase in the test score. The intercept is 86, suggesting that with zero total points redeemed, the expected total flights booking is 86.
-
-
 
 
 
@@ -525,22 +539,42 @@ FROM
 |------|-----------------   |---------------------------- | ---------------------------- |
 | Overall    | 16737          | 2819                     | 0.1684                 |
 
+
+Below is the average total fights, average distance travelled, average points accumulated and average points redeemed  by retained customers 
+
+| year | avg_total_flights | avg_distance_travelled | avg_points_accumulated | avg_points_redeemed |
+|------|--------------------|------------------------|------------------------|---------------------|
+| 2017 | 63                 | 14726                  | 1470.354               | 371                 |
+| 2018 | 72                 | 17169                  | 1794.119               | 438                 |
+
+
 The following values were used as measurement to determine any common characteristics carried out by churned customers: the average total fights, average distance travelled, average points accumulated and average points redeemed  by churned customers 
+
+```sql
+WITH churned_customers as
+(select clh.loyalty_number, clh.City, clh.Gender, clh.Education, clh.Salary, clh.marital_status, clh.loyalty_card, clh.clv, clh.enrollment_type, clh.cancellation_year, clh.cancellation_month, cfa.year, sum(cfa.total_flights) as total_flights, sum(cfa.distance) as distance
+, sum(cfa.points_accumulated) as points_accumulated, sum(cfa.points_redeemed) as points_redeemed, sum(cfa.dollar_cost_points_redeemed) as dollar_cost_points_redeemed
+from customer_loyalty_history clh
+ join customer_flight_activity cfa on clh.loyalty_number = cfa.loyalty_number
+group by clh.loyalty_number, clh.City, clh.Gender, clh.Education, clh.Salary, clh.marital_status, clh.loyalty_card, clh.clv, clh.enrollment_type, clh.cancellation_year, clh.cancellation_month, cfa.year
+)
+
+SELECT
+AVG(total_flights) AS avg_total_flights,
+    AVG(distance) AS avg_distance_traveled
+	from churned_customers
+	where cancellation_year <> 'Active'
+or  total_flights <= 10
+
+```
 
 | year | avg_total_flights | avg_distance_travelled | avg_points_accumulated | avg_points_redeemed |
 |------|--------------------|------------------------|------------------------|---------------------|
 | 2017 | 10                 | 2354                   | 235.079                | 61                  |
 | 2018 | 9                  | 2369                   | 252.596                | 56                  |
 
-Then the average total fights, average distance travelled, average points accumulated and average points redeemed  by retained customers 
 
-| year | avg_total_flights | avg_distance_travelled | avg_points_accumulated | avg_points_redeemed |
-|------|--------------------|------------------------|------------------------|---------------------|
-| 2017 | 63                 | 14726                  | 1470.354               | 371                 |
-| 2018 | 72         
-
-
-The chart above indicates the following:
+This indicates the following:
 - Retained customers are taking six times as many flights as churned customers. This suggests that higher engagement with the service, in terms of flight frequency, is a significant factor in customer retention. Frequent flyers likely find more value in the service, leading to higher retention rates.
 - Retained customers travel six times the distance compared to churned customers. This could indicate that customers who travel longer distances are more likely to stay loyal, possibly because they are more likely to accumulate benefits and find the service more indispensable.
 -  Retained customers accumulate almost seven times the points of churned customers. This highlights the importance of the loyalty program in customer retention. Customers who earn more points are likely incentivized to continue using the service to maximize their rewards.
@@ -582,6 +616,11 @@ FROM
 GROUP BY 
     clv_segment, Gender, Education, marital_status;
 ```
+| clv_segment | avg_flights_booked | avg_distance_traveled | avg_points_accumulated | avg_points_redeemed |
+|-------------|---------------------|-----------------------|------------------------|---------------------|
+| low-value   | 5                   | 1214                  | 124.307634             | 30                  |
+| high-value  | 4                   | 1146                  | 118.491033             | 32                  |
+
 
 We segmented customers into low value customers and high value customers based on their clv. We can see that low value customers tend to accumulate more points and redeem more points, redeem more points, travel more distance and book more flights monthly in comparison with high value customers. Low-value customers may be more price-sensitive and, therefore, more motivated to take advantage of loyalty programs to save money. They might travel more frequently on discounted or budget fares, accumulating and redeeming points more actively. These customers might be taking shorter, more frequent trips, which increases the number of flights and distance traveled monthly.
 
