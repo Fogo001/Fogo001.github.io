@@ -5,8 +5,6 @@
 # Table of contents 
 - [Executive Summary](#executive-summary)
 	-[Objectives](#objectives)
-	-[User Story](#user-story)
-	-[Problem Statement](#problem-statement)
 - [Data Source](#data-source)
 - [Methodology](#methodology)
 	- [Stages](#stages)
