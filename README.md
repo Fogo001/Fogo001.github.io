@@ -29,9 +29,9 @@ This project investigates the influence of airline loyalty program on flight boo
 
 ## Objectives
 1.	Identify Patterns and Trends: Uncover patterns in customer booking behaviour influenced by various promotions.
-2.	 Evaluate Customer Retention: Measure changes in customer churn rates attributable to loyalty program  by analysing repeat booking data.
+2.	 Evaluate Customer Churn: Measure changes in customer churn  attributable to booking behaviour.
 3.	Segment Analysis: Segment the customer base to identify which groups respond most positively to loyalty program , based on booking behaviour characteristics.
-4.	Provide Recommendations: Offer data-driven recommendations to enhance the design and execution of future loyalty campaigns for improved effectiveness and customer satisfaction.
+4.	Provide Recommendations: Offer data-driven recommendations to enhance the for improved effectiveness and customer retention.
 
 
 # Data Source
@@ -48,7 +48,7 @@ We need data on the Impact of Adventure Works Airlines’ Loyalty Campaign Progr
 -	Dollar Cost  Points  Redeemed 
 
  Where is the data coming from? 
-The data is sourced from Kaggle (an Excel extract), [see here to find it.](w.kaggle.com/datasets/bhavyadhingra00020/top-100-social-media-influencers-2024-countrywise?resource=download). The tpes of data involved are structured and quantitative.
+The data is sourced from Kaggle (an Excel extract), [see here to find it.]([www.kaggle.com/datasets/bhavyadhingra00020/top-100-social-media-influencers-2024-countrywise?resource=download](https://www.kaggle.com/datasets/agungpambudi/airline-loyalty-campaign-program-impact-on-flights)). The tpes of data involved are structured and quantitative.
 
 # Methodology
 Regression Analysis was used to see the correlation between flights booked and points redeemed.
