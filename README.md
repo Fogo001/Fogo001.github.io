@@ -4,7 +4,7 @@
 
 # Table of contents 
 - [Executive Summary](#executive-summary)
-  -[Objectives](#objectives)
+  	- [Objectives](#objectives)
 - [Data Source](#data-source)
 - [Methodology](#methodology)
 	- [Stages](#stages)
@@ -380,11 +380,29 @@ Here are the key questions we need to answer for our marketing client:
 
 ### 1. What is the trend in the number of flights booked by enrolled customers over the years?
 
-From the chart above, we can see there was a significant increased in the numbe of flights booked. This may be attributed to the introduction of the 2018 loyalty promotions.
+```
+sql
+
+select  year, sum(total_flights) as total_flights from customer_flight_activity
+group by months, year
+order by year
+
+```
+
+From the chart above, we can see there was a significant increased in the number of flights booked. This may be attributed to the introduction of the 2018 loyalty promotions.
 
 
 
 ### 2. Are there any seasonal patterns in the trend in the number of flights booked by enrolled customers over the years?
+
+```
+sql
+
+select months, year, sum(total_flights) as total_flights from customer_flight_activity
+group by months, year
+order by year
+
+```
 
 The chart indicates that there is a pattern in the number of flights booked in specific months in a year. In both 2017 and 2018, the months with the highest number of flights being June and July and the months with the least number of flight bookings being January and February. 
 As July falls during summer, people tend to travel to various destinations. This may be responsible for the increase in the number of flights
@@ -395,39 +413,135 @@ Additionally, the chart indicates there was an increase in the number of flight 
 
 ### 3. Do customers who redeem more points tend to book more flights? Is there a diminishing return effect?
 
+```
+sql
+
+select loyalty_number, sum(total_flights) as total_flights_booked, sum(points_accumulated) as total_points_accumulated from customer_flight_activity
+group by loyalty_number
+
+```
+```
+python
+
+```
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+data = pd.read_csv("C:\ProgramData\Microsoft\Windows\Start Menu\Programs\PostgreSQL 16\proj\mergedfrr.csv")
+
+from scipy import stats
+
+total_points_redeemed = data['total_points_redeemed']
+total_flights_booked = data['total_flights_booked']
+slope, intercept, r, p, std_err = stats.linregress(total_points_redeemed, total_flights_booked)
+
+print(r)
+print(slope)
+print(intercept)
+print(p)
+
+sns.lmplot(x='total_points_redeemed', y='total_flights_booked', data=data, aspect=2)
+plt.title('Regression Line - Total Points Redeemed vs Total Flights Booked')
+plt.xlabel('Total Points Redeemed')
+plt.ylabel('Total Flights Booked')
+plt.show()
+
+```
+
 The correlation coefficient of 0.5395 indicates a moderate positive relationship between total points redeemed and total flights booked. This suggests as the number of points redeemed increases, the number of flights booked also tends to increase. The relationship is moderate, meaning there is a noticeable trend, but it is not exceptionally strong. There are other factors likely influencing both variables.
 
 The trendline slopes upward from left to right indicating a positive relationship. However, it appears there are a number of plots away from our trendline. This indicates there are outliers within our data affecting the strength of the relatiomship between between total points redeemed and total flights booked. This may be due to the number of 0 total flights and 0 total points redeemed
+
+An R-squared value of 0.25 means that 25% of the variability in the dependent variable can be explained by the independent variable. This suggests a moderate fit, indicating that while there is a statistically significant relationship, much of the variability is due to other factor. The p-value for the slope is 0, which is statistically significant, suggesting a reliable relationship between total points redeemed and total flights booked.
+
+```
+python
+
+data['log_points'] = np.log1p(data['total_points_redeemed'])
+data['log_flights'] = np.log1p(data['total_flights_booked'])
+
+sns.lmplot(x='log_points', y='log_flights', data=data, aspect=2)
+plt.title('Log-Transformed Regression - Points Accumulated vs Flights Booked')
+plt.xlabel('Log of Total Points Redeemed')
+plt.ylabel('Log of Total Flights Booked')
+plt.show()
+
+```
+
+
 The straight line implies that there is no diminishing returns effect; the rate of increase remains consistent as points redeemed increase.
 The slope of the regression line is 0.05, meaning each additional total points redeemed is associated with a 0.05-point increase in the test score. The intercept is 86, suggesting that with zero total points redeemed, the expected total flights booking is 86.
-An R-squared value of 0.25 means that 25% of the variability in the dependent variable can be explained by the independent variable. This suggests a moderate fit, indicating that while there is a statistically significant relationship, much of the variability is due to other factor. The p-value for the slope is 0, which is statistically significant, suggesting a reliable relationship between total points redeemed and total flights booked.
+
 
 
 
 
 ### 4. Can we identify any common characteristics or behaviors among customers who churn?
-First, total customers that churned and how we defined them
+First, I identified  churned customers as those who cancelled their enrollment and those who have not booked more than 10 flights in a year.
+
+```
+sql
+
+WITH cte as
+(select clh.loyalty_number, clh.City, clh.Gender, clh.Education, clh.Salary, clh.marital_status, clh.loyalty_card, clh.clv, clh.enrollment_type, clh.cancellation_year, clh.cancellation_month, sum(cfa.total_flights) as total_flights, sum(cfa.distance) as distance
+, sum(cfa.points_accumulated) as points_accumulated, sum(cfa.points_redeemed) as points_redeemed, sum(cfa.dollar_cost_points_redeemed) as dollar_cost_points_redeemed
+from customer_loyalty_history clh
+ join customer_flight_activity cfa on clh.loyalty_number = cfa.loyalty_number
+group by clh.loyalty_number, clh.City, clh.Gender, clh.Education, clh.Salary, clh.marital_status, clh.loyalty_card, clh.clv, clh.enrollment_type, clh.cancellation_year, clh.cancellation_month
+)
+select * from cte
+where cancellation_year <> 'Active'
+OR  total_flights <= 10
+
+```
 | Churned Customers | 2819 |
-Then , the churn rate 
+
+
+Then , I calculated the churn rate 
+
+```
+sql
+
+WITH churned_customers as
+(select clh.loyalty_number, clh.City, clh.Gender, clh.Education, clh.Salary, clh.marital_status, clh.loyalty_card, clh.clv, clh.enrollment_type, clh.cancellation_year, clh.cancellation_month, sum(cfa.total_flights) as total_flights, sum(cfa.distance) as distance
+, sum(cfa.points_accumulated) as points_accumulated, sum(cfa.points_redeemed) as points_redeemed, sum(cfa.dollar_cost_points_redeemed) as dollar_cost_points_redeemed
+from customer_loyalty_history clh
+ join customer_flight_activity cfa on clh.loyalty_number = cfa.loyalty_number
+group by clh.loyalty_number, clh.City, clh.Gender, clh.Education, clh.Salary, clh.marital_status, clh.loyalty_card, clh.clv, clh.enrollment_type, clh.cancellation_year, clh.cancellation_month
+)
+
+select 'overall' as segment,
+COUNT(*) AS Total_Customers,
+    SUM(CASE WHEN cancellation_year <> 'Active' or total_flights <= 10 THEN 1 ELSE 0 END) AS Churned_Customers,
+    (SUM(CASE WHEN cancellation_year <> 'Active' or total_flights <= 10 THEN 1 ELSE 0 END) * 1.0 / COUNT(*)) AS Churn_Rate
+FROM 
+    churned_customers;
+```
 | Segment | Total_customers       | Churned_customers       | Churn_Rate       |
 |------|-----------------   |---------------------------- | ---------------------------- |
 | Overall    | 16737          | 2819                     | 0.1684                 |
 
-Then, the average total fights, average distance travelled, average points accumulated and average points redeemed  by churned customers 
+The following values were used as measurement to determine any common characteristics carried out by churned customers: the average total fights, average distance travelled, average points accumulated and average points redeemed  by churned customers 
+
 | year | avg_total_flights       | avg_distance_travelled       | avg_ points _accumulated       | avg_points_redeemed       |
 |------|-----------------   |---------------------------- | ---------------------------- |
 | 2017    | 10          | 2354                     | 235.079                 | 61
 | 2018    | 9          | 2369                     | 252.596                 | 56
+
 Then the average total fights, average distance travelled, average points accumulated and average points redeemed  by retained customers 
 | year | avg_total_flights       | avg_distance_travelled       | avg_ points _accumulated       | avg_points_redeemed       |
 |------|-----------------   |---------------------------- | ---------------------------- |
 | 2017    | 63          | 14726                     | 1470.354                | 371
 | 2018    | 72          | 17169                     | 1794.119                 | 438
 
-•	Retained customers are taking six times as many flights as churned customers. This suggests that higher engagement with the service, in terms of flight frequency, is a significant factor in customer retention. Frequent flyers likely find more value in the service, leading to higher retention rates. 
-•	Retained customers travel six times the distance compared to churned customers. This could indicate that customers who travel longer distances are more likely to stay loyal, possibly because they are more likely to accumulate benefits and find the service more indispensable. 
-•	 Retained customers accumulate almost seven times the points of churned customers. This highlights the importance of the loyalty program in customer retention. Customers who earn more points are likely incentivized to continue using the service to maximize their rewards. 
-•	 Retained customers redeem more than six times the points of churned customers. This suggests that the ability to redeem points effectively is critical in keeping customers engaged. It could imply that churned customers may not find the points redemption process as accessible or valuable, leading to their discontinuation.
+
+The chart above indicates the following:
+- Retained customers are taking six times as many flights as churned customers. This suggests that higher engagement with the service, in terms of flight frequency, is a significant factor in customer retention. Frequent flyers likely find more value in the service, leading to higher retention rates.
+- Retained customers travel six times the distance compared to churned customers. This could indicate that customers who travel longer distances are more likely to stay loyal, possibly because they are more likely to accumulate benefits and find the service more indispensable.
+-  Retained customers accumulate almost seven times the points of churned customers. This highlights the importance of the loyalty program in customer retention. Customers who earn more points are likely incentivized to continue using the service to maximize their rewards.
+-   Retained customers redeem more than six times the points of churned customers. This suggests that the ability to redeem points effectively is critical in keeping customers engaged. It could imply that churned customers may not find the points redemption process as accessible or valuable, leading to their discontinuation.
 
 Metric 4
 | Average Distance | Average Flights Booked        |
@@ -435,33 +549,70 @@ Metric 4
 | `14648          | 62         |
 
 
-###5
+
 | Segment | Total_customers       | Churned_customers       | Churn_Rate       |
 |------|-----------------   |---------------------------- | ---------------------------- |
 | Overall    | 16737          | 2819                     | 0.1684                 |
+
+### 5. Analyze specific segments more deeply (e.g., high-value customers vs. low-value customers) to understand the characteristics driving CLV?
+
+```
+sql 
+	WITH CustomerSegments AS (
+    SELECT 
+        clh.loyalty_number,
+        CASE 
+            WHEN clh.clv BETWEEN 0 AND 40000 THEN 'low-value'
+            WHEN clh.clv BETWEEN 40001 AND 90000 THEN 'high-value'
+            ELSE 'other'
+        END AS clv_segment,
+        clh.Gender,
+        clh.Education,
+        clh.marital_status,
+        cfa.total_flights,
+        cfa.distance, cfa.points_accumulated, cfa.points_redeemed 
+    FROM 
+        customer_loyalty_history clh
+    JOIN 
+        customer_flight_activity cfa ON clh.loyalty_number = cfa.loyalty_number
+)
+SELECT 
+    clv_segment,
+    Gender,
+    Education,
+    marital_status,
+    AVG(total_flights) AS avg_flights_booked,
+    AVG(distance) AS avg_distance_traveled,
+	avg(points_accumulated) as avg_points_accumulated,
+	avg(points_redeemed) as avg_points_redeemed
+FROM 
+    CustomerSegments
+GROUP BY 
+    clv_segment, Gender, Education, marital_status;
+```
+
 We segmented customers into low value customers and high value customers based on their clv. We can see that low value customers tend to accumulate more points and redeem more points, redeem more points, travel more distance and book more flights monthly in comparison with high value customers. Low-value customers may be more price-sensitive and, therefore, more motivated to take advantage of loyalty programs to save money. They might travel more frequently on discounted or budget fares, accumulating and redeeming points more actively. These customers might be taking shorter, more frequent trips, which increases the number of flights and distance traveled monthly.
 
 
 
 ## Findings
 
-- What did we learn?
 1. The 2018 loyalty promotions appear to have had a positive impact on customer engagement and booking behavior.
 2. The peak in summer (June and July) suggests higher travel activity due to favorable weather, while the low in winter (January and February) suggests reduced travel activity.
 3. While there is a positive trend indicating that more points redeemed correlate with more flights booked, other factors also influence these variables.
 4. High engagement and effective utilization of the loyalty program are critical for customer retention. Frequent flyers and those who redeem points are more likely to stay loyal to the service
 
-# recommendations
-•	Continue and expand loyalty promotions that have proven effective in increasing flight bookings. Consider introducing new incentives and rewards to maintain customer engagement.
-•	Develop targeted marketing campaigns during peak seasons (June and July) to maximize bookings. Additionally, create special offers and promotions in the low season (January and February) to stimulate travel during these months.
-•	Simplify and enhance the points redemption process to ensure it is accessible and valuable to all customers. Address any barriers that might prevent customers from redeeming points effectively.
-•	Investigate and address the outliers affecting the correlation between points redeemed and flights booked by gaining direct insights from customers about their experiences with the loyalty program.
-•	. Understanding the reasons behind 0 total flights and 0 total points redeemed can help in refining loyalty strategies.
-•	Differentiate loyalty program benefits for low-value and high-value customers to better match their travel patterns and preferences.
+# Recommendations
+- Continue and expand loyalty promotions that have proven effective in increasing flight bookings. Consider introducing new incentives and rewards to maintain customer engagement.
+- Develop targeted marketing campaigns during peak seasons (June and July) to maximize bookings. Additionally, create special offers and promotions in the low season (January and February) to stimulate travel during these months.
+- Simplify and enhance the points redemption process to ensure it is accessible and valuable to all customers. Address any barriers that might prevent customers from redeeming points effectively.
+- Investigate and address the outliers affecting the correlation between points redeemed and flights booked by gaining direct insights from customers about their experiences with the loyalty program.
+- Understanding the reasons behind 0 total flights and 0 total points redeemed can help in refining loyalty strategies.
+- Differentiate loyalty program benefits for low-value and high-value customers to better match their travel patterns and preferences.
 
 # Feasibility
-•  Data Gaps: Missing data from certain periods or for specific customer segments due to system outages or recording errors.
-•  Zero Values: Some customers might have zero points redeemed, making log transformation problematic unless these values are handled appropriately.
+- Data Gaps: Missing data from certain periods or for specific customer segments due to system outages or recording errors.
+-  Zero Values: Some customers might have zero points redeemed, making log transformation problematic unless these values are handled appropriately.
 
 -the months individuals usually cancel
 
