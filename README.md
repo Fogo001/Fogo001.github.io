@@ -20,7 +20,6 @@
  	 - [Findings](#findings) 
 - [Recommendations](#recommendations)
 - [Feasibility](#feasibility)
-- [Conclusion](#conclusion)
 
 
 # Executive Summary
@@ -93,10 +92,10 @@ Regression Analysis was used to see the correlation between flights booked and p
 
 ## Data Cleaning
 The cleaned data should meet the following criteria and constraints:
-•	Only relevant columns should be retained.
-•	All data types should be appropriate for the contents of each column.
-•	No column should contain null values, indicating complete data for all records.
-•	No rows should contain duplicate values
+- Only relevant columns should be retained.
+- All data types should be appropriate for the contents of each column.
+- No column should contain null values, indicating complete data for all records.
+- No rows should contain duplicate values
 ### Steps to clean and shape the data into the desired format
 1.	Remove unnecessary columns by only selecting the ones you need e.g postal_code and Country 
 2.	Remove duplicate data within the customer flight activity dataset
