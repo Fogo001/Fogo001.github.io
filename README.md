@@ -1,6 +1,5 @@
-# Data Portfolio
 
-# Data Portfolio:  Analyzing the Impact of Airline Loyalty Campaign Programs on Flight Bookings
+# Analyzing the Impact of Airline Loyalty Campaign Programs on Flight Bookings
 
 # Table of contents 
 - [Executive Summary](#executive-summary)
