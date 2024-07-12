@@ -1,7 +1,7 @@
 
 # Analyzing the Impact of Airline Loyalty Campaign Programs on Flight Bookings
 
-# Table of contents 
+## Table of contents 
 - [Executive Summary](#executive-summary)
   	- [Objectives](#objectives)
 - [Data Source](#data-source)
